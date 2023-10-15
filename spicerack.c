@@ -1,0 +1,76 @@
+#include "spicerack.h"
+
+#include <assert.h>
+#include <stdlib.h>
+
+struct InputLine {
+   char changed;
+   enum SignalValue value;
+   int output;
+   void (*handler)(void*);
+   void* block;
+};
+
+struct InputLine inputs[1000];
+int nextInput = 0;
+int nextOutput = 1000;
+
+/* TODO realloc or fail when over the array size limit */
+struct InputLine* allocateInput(void* block, void (*handler)(void*)) {
+   int i = nextInput++;
+   inputs[i].changed = 1;
+   inputs[i].value = HIGH_Z;
+   inputs[i].output = -1;
+   inputs[i].handler = handler;
+   inputs[i].block = block;
+   return inputs + i;
+}
+
+/* TODO fail when wrapping around? */
+int allocateOutput(void) {
+   return nextOutput++;
+}
+
+enum SignalValue inputLineGet(struct InputLine* line) {
+   assert(line != NULL);
+   return line->value;
+}
+
+void inputLineHandled(struct InputLine* line) {
+   assert(line != NULL);
+   line->changed = 0;
+}
+
+char inputLineIsChanged(struct InputLine* line) {
+   assert(line != NULL);
+   return line->changed;
+}
+
+void inputLineSet(struct InputLine* line, enum SignalValue value, int output) {
+   assert(line != NULL);
+   assert(line->output == -1 || line->output == output);
+   assert(line->handler != NULL);
+   assert(line->block != NULL);
+   if (line->value != value) {
+      line->changed = 1;
+      line->value = value;
+      line->output = output;
+   }
+}
+
+void propagate(void) {
+   int goAgain = 0;
+   do {
+      int i;
+      goAgain = 0;
+      for (i = 0; i < nextInput; i++) {
+         if (inputs[i].changed) {
+            goAgain = 1;
+            assert(inputs[i].handler != NULL);
+            assert(inputs[i].block != NULL);
+            inputs[i].handler(inputs[i].block);
+            inputs[i].changed = 0;
+         }
+      }
+   } while(goAgain);
+}
