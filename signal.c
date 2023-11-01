@@ -12,16 +12,16 @@ struct Signal {
 };
 
 /* TODO decide how to handle allocation, maybe just stick with malloc for now */
-struct InputLine inputs[1000];
+struct Signal inputs[1000];
 int nextInput = 0;
 int nextOutput = 1000;
 
 /* TODO realloc or fail when over the array size limit */
-struct InputLine* allocateInput(void* block, void (*handler)(void*)) {
+struct Signal* signalNew(void* block, void (*handler)(void*)) {
    int i = nextInput++;
    inputs[i].changed = 1;
    inputs[i].value = HIGH_Z;
-   inputs[i].output = -1;
+   inputs[i].writer = -1;
    inputs[i].handler = handler;
    inputs[i].block = block;
    return inputs + i;
@@ -32,30 +32,30 @@ int allocateOutput(void) {
    return nextOutput++;
 }
 
-enum SignalValue inputLineGet(struct InputLine* line) {
+enum SignalValue signalRead(struct Signal* line) {
    assert(line != NULL);
    return line->value;
 }
 
-void inputLineHandled(struct InputLine* line) {
+void signalHandled(struct Signal* line) {
    assert(line != NULL);
    line->changed = 0;
 }
 
-char inputLineIsChanged(struct InputLine* line) {
+char signalChanged(struct Signal* line) {
    assert(line != NULL);
    return line->changed;
 }
 
-void inputLineSet(struct InputLine* line, enum SignalValue value, int output) {
+void signalWrite(struct Signal* line, enum SignalValue value, int output) {
    assert(line != NULL);
-   assert(line->output == -1 || line->output == output);
+   assert(line->writer == -1 || line->writer == output);
    assert(line->handler != NULL);
    assert(line->block != NULL);
    if (line->value != value) {
       line->changed = 1;
       line->value = value;
-      line->output = output;
+      line->writer = output;
    }
 }
 

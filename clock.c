@@ -1,16 +1,16 @@
 #include "clock.h"
 
-#include "spicerack.h"
+#include "signal.h"
 
 #include <assert.h>
 #include <stdlib.h>
 
-struct InputLineNode {
-   struct InputLine* item;
-   struct InputLineNode* next;
+struct SignalNode {
+   struct Signal* item;
+   struct SignalNode* next;
 };
 
-typedef struct InputLineNode NODE;
+typedef struct SignalNode NODE;
 
 struct Clock {
    NODE* inputs;
@@ -33,7 +33,7 @@ void clockFree(CLOCK* clock) {
    free(clock);
 }
 
-void clockConnect(CLOCK* clock, struct InputLine* line) {
+void clockConnect(CLOCK* clock, struct Signal* line) {
    NODE* node = malloc(sizeof (NODE));
    assert(clock != NULL);
    assert(line != NULL);
@@ -45,7 +45,7 @@ void clockConnect(CLOCK* clock, struct InputLine* line) {
 void clockRunTick(CLOCK* clock, enum SignalValue value) {
    NODE* node;
    for (node = clock->inputs; node != NULL; node = node->next) {
-      inputLineSet(node->item, value, clock->OID);
+      signalWrite(node->item, value, clock->OID);
    }
    propagate();
 }

@@ -1,22 +1,23 @@
 #include "andgate.h"
 #include "clock.h"
+#include "signal.h"
 
 #include <stdio.h>
 
 struct Debugger {
-   struct InputLine* I;
+   struct Signal* I;
 };
 
 void debugHandler(void* block) {
    struct Debugger* d = block;
-   printf("%d %d\n", inputLineIsChanged(d->I), inputLineGet(d->I));
-   inputLineHandled(d->I);
+   printf("%d %d\n", signalChanged(d->I), signalRead(d->I));
+   signalHandled(d->I);
 }
 
 int main(void) {
    CLOCK* clock = clockNew();
    struct Debugger d;
-   d.I = allocateInput(&d, debugHandler);
+   d.I = signalNew(&d, debugHandler);
    /*
     struct AndGate* and1 = allocateAndGate();
     connectAndGate(and1, d.I);

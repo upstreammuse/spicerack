@@ -1,12 +1,11 @@
 #pragma once
 
-#include "spicerack.h"
-
 struct Clock;
 typedef struct Clock CLOCK;
+struct Signal;
 
 CLOCK* clockNew(void);
 void clockFree(CLOCK*);
 
-void clockConnect(CLOCK*, struct InputLine*);
+void clockConnect(CLOCK*, struct Signal*);
 void clockRun(CLOCK*, int cycleCount);

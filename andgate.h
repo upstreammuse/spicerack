@@ -1,9 +1,9 @@
 #pragma once
 
-#include "spicerack.h"
-
 struct AndGate;
+struct Signal;
+enum SignalValue;
 
 struct AndGate* allocateAndGate(void);
-void connectAndGate(struct AndGate*, struct InputLine*);
+void connectAndGate(struct AndGate*, struct Signal*);
 void testAndGate(struct AndGate*, enum SignalValue, enum SignalValue);

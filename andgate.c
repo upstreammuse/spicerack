@@ -1,6 +1,6 @@
 #include "andgate.h"
 
-#include "spicerack.h"
+#include "signal.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -10,17 +10,17 @@ const int AND_GATE_MAGIC = 0x4155a3dd;
 
 struct AndGate {
    int magic;
-   struct InputLine* A;
-   struct InputLine* B;
-   struct InputLine* O;
+   struct Signal* A;
+   struct Signal* B;
+   struct Signal* O;
    int OID;
 };
 
 struct AndGate* allocateAndGate(void) {
    struct AndGate* andGate_ = malloc(sizeof (struct AndGate));
    andGate_->magic = AND_GATE_MAGIC;
-   andGate_->A = allocateInput(andGate_, andGateHandler);
-   andGate_->B = allocateInput(andGate_, andGateHandler);
+   andGate_->A = signalNew(andGate_, andGateHandler);
+   andGate_->B = signalNew(andGate_, andGateHandler);
    andGate_->O = NULL;
    andGate_->OID = allocateOutput();
    return andGate_;
@@ -37,8 +37,8 @@ void andGateHandler(void* block) {
    assert(gate != NULL);
    assert(*magic == AND_GATE_MAGIC);
 
-   A = inputLineGet(gate->A);
-   B = inputLineGet(gate->B);
+   A = signalRead(gate->A);
+   B = signalRead(gate->B);
 
    switch (A) {
       case UNKNOWN:
@@ -60,13 +60,14 @@ void andGateHandler(void* block) {
          break;
    }
 
-   inputLineSet(gate->O, O, gate->OID);
-   inputLineHandled(gate->A);
-   inputLineHandled(gate->B);
+   signalWrite(gate->O, O, gate->OID);
+   signalHandled(gate->A);
+   signalHandled(gate->B);
 }
 
-void connectAndGate(struct AndGate* gate, struct InputLine* next) {
+void connectAndGate(struct AndGate* gate, struct Signal* next) {
    assert(gate != NULL);
+   assert(gate->magic == AND_GATE_MAGIC);
    assert(next != NULL);
    gate->O = next;
 }
@@ -74,7 +75,7 @@ void connectAndGate(struct AndGate* gate, struct InputLine* next) {
 void testAndGate(struct AndGate* gate, enum SignalValue inA, enum SignalValue inB) {
    static int writerA = 46546;
    static int writerB = 94945;
-   inputLineSet(gate->A, inA, writerA);
-   inputLineSet(gate->B, inB, writerB);
+   signalWrite(gate->A, inA, writerA);
+   signalWrite(gate->B, inB, writerB);
    propagate();
 }
