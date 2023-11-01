@@ -19,9 +19,10 @@ int main(void) {
    struct Debugger d;
    d.I = signalNew(&d, debugHandler);
    /*
-    struct AndGate* and1 = allocateAndGate();
+    struct AndGate* and1 = andGateNew();
     connectAndGate(and1, d.I);
     testAndGate(and1, HIGH, HIGH);
+    andGateFree(and1);
     */
    clockConnect(clock, d.I);
    clockRun(clock, 2);

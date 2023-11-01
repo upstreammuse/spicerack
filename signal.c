@@ -27,6 +27,11 @@ struct Signal* signalNew(void* block, void (*handler)(void*)) {
    return inputs + i;
 }
 
+void signalFree(struct Signal* signal) {
+   (void)signal;
+   // do nothing for now
+}
+
 /* TODO fail when wrapping around? */
 int allocateOutput(void) {
    return nextOutput++;

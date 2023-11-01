@@ -16,7 +16,7 @@ struct AndGate {
    int OID;
 };
 
-struct AndGate* allocateAndGate(void) {
+struct AndGate* andGateNew(void) {
    struct AndGate* andGate_ = malloc(sizeof (struct AndGate));
    andGate_->magic = AND_GATE_MAGIC;
    andGate_->A = signalNew(andGate_, andGateHandler);
@@ -24,6 +24,16 @@ struct AndGate* allocateAndGate(void) {
    andGate_->O = NULL;
    andGate_->OID = allocateOutput();
    return andGate_;
+}
+
+void andGateFree(struct AndGate* gate) {
+   assert(gate != NULL);
+   assert(gate->magic == AND_GATE_MAGIC);
+
+   signalFree(gate->A);
+   signalFree(gate->B);
+   signalFree(gate->O);
+   free(gate);
 }
 
 void andGateHandler(void* block) {
