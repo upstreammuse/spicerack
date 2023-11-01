@@ -17,6 +17,8 @@ struct Clock {
    int OID;
 };
 
+typedef struct Clock CLOCK;
+
 CLOCK* clockNew(void) {
    CLOCK* clock = malloc(sizeof (CLOCK));
    clock->inputs = NULL;
@@ -25,6 +27,7 @@ CLOCK* clockNew(void) {
 }
 
 void clockFree(CLOCK* clock) {
+   assert(clock != NULL);
    while (clock->inputs != NULL) {
       NODE* node = clock->inputs;
       clock->inputs = node->next;

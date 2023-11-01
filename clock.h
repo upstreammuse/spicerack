@@ -1,11 +1,10 @@
 #pragma once
 
 struct Clock;
-typedef struct Clock CLOCK;
 struct Signal;
 
-CLOCK* clockNew(void);
-void clockFree(CLOCK*);
+struct Clock* clockNew(void);
+void clockFree(struct Clock*);
 
-void clockConnect(CLOCK*, struct Signal*);
-void clockRun(CLOCK*, int cycleCount);
+void clockConnect(struct Clock*, struct Signal*);
+void clockRun(struct Clock*, int cycleCount);

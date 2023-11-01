@@ -7,6 +7,8 @@ enum SignalValue {
    HIGH_Z
 };
 
+char* signalValueStr(enum SignalValue);
+
 struct Signal;
 typedef struct Signal SIGNAL;
 

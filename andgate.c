@@ -75,7 +75,7 @@ void andGateHandler(void* block) {
    signalHandled(gate->B);
 }
 
-void connectAndGate(struct AndGate* gate, struct Signal* next) {
+void andGateConnect(struct AndGate* gate, struct Signal* next) {
    assert(gate != NULL);
    assert(gate->magic == AND_GATE_MAGIC);
    assert(next != NULL);
