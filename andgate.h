@@ -1,8 +1,9 @@
 #pragma once
 
+#include "signalvalue.h"
+
 struct AndGate;
 struct Signal;
-enum SignalValue;
 
 struct AndGate* andGateNew(void);
 void andGateFree(struct AndGate*);

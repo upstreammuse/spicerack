@@ -42,7 +42,7 @@ struct Signal* signalNew(void* block, void (*handler)(void*)) {
 
 void signalFree(struct Signal* signal) {
    (void)signal;
-   // do nothing for now
+   /* do nothing for now */
 }
 
 /* TODO fail when wrapping around? */

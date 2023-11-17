@@ -1,13 +1,6 @@
 #pragma once
 
-enum SignalValue {
-   UNKNOWN,
-   LOW,
-   HIGH,
-   HIGH_Z
-};
-
-char* signalValueStr(enum SignalValue);
+#include "signalvalue.h"
 
 struct Signal;
 typedef struct Signal SIGNAL;
