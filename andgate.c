@@ -12,11 +12,7 @@ typedef enum SignalValue SIGVAL;
 
 void andGateHandler(void*);
 
-/* TODO either make this dynamically assigned, or need a central repository */
-const int AND_GATE_MAGIC = 0x4155a3dd;
-
 struct AndGate {
-   int magic;
    SIGNAL* A;
    SIGNAL* B;
    SIGNAL* O;
@@ -25,7 +21,6 @@ struct AndGate {
 
 ANDGATE* andGateNew(void) {
    ANDGATE* gate = malloc(sizeof (ANDGATE));
-   gate->magic = AND_GATE_MAGIC;
    gate->A = signalNew(gate, andGateHandler);
    gate->B = signalNew(gate, andGateHandler);
    gate->O = NULL;
@@ -35,7 +30,6 @@ ANDGATE* andGateNew(void) {
 
 void andGateFree(ANDGATE* gate) {
    if (gate == NULL) return;
-   assert(gate->magic == AND_GATE_MAGIC);
    signalFree(gate->A);
    signalFree(gate->B);
    signalFree(gate->O);
@@ -44,20 +38,17 @@ void andGateFree(ANDGATE* gate) {
 
 void andGateConnect(ANDGATE* gate, SIGNAL* output) {
    assert(gate != NULL);
-   assert(gate->magic == AND_GATE_MAGIC);
    assert(output != NULL);
    gate->O = output;
 }
 
 SIGNAL* andGateInputA(ANDGATE* gate) {
    assert(gate != NULL);
-   assert(gate->magic == AND_GATE_MAGIC);
    return gate->A;
 }
 
 SIGNAL* andGateInputB(ANDGATE* gate) {
    assert(gate != NULL);
-   assert(gate->magic == AND_GATE_MAGIC);
    return gate->B;
 }
 
@@ -68,8 +59,6 @@ void andGateHandler(void* block) {
    SIGVAL O = UNKNOWN;
 
    assert(gate != NULL);
-   assert(gate->magic == AND_GATE_MAGIC);
-
    A = signalRead(gate->A);
    B = signalRead(gate->B);
 
