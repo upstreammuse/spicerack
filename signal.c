@@ -31,31 +31,14 @@ void signalFree(struct Signal* signal) {
    /* do nothing for now */
 }
 
-enum SignalValue signalRead(struct Signal* line) {
-   assert(line != NULL);
-   return line->value;
-}
-
-void signalHandled(struct Signal* line) {
-   assert(line != NULL);
-   line->changed = 0;
-}
-
 char signalChanged(struct Signal* line) {
    assert(line != NULL);
    return line->changed;
 }
 
-void signalWrite(struct Signal* line, enum SignalValue value, int output) {
+void signalHandled(struct Signal* line) {
    assert(line != NULL);
-   assert(line->writer == -1 || line->writer == output);
-   assert(line->handler != NULL);
-   assert(line->block != NULL);
-   if (line->value != value) {
-      line->changed = 1;
-      line->value = value;
-      line->writer = output;
-   }
+   line->changed = 0;
 }
 
 void signalPropagate(void) {
@@ -73,4 +56,21 @@ void signalPropagate(void) {
          }
       }
    } while(goAgain);
+}
+
+enum SignalValue signalRead(struct Signal* line) {
+   assert(line != NULL);
+   return line->value;
+}
+
+void signalWrite(struct Signal* line, enum SignalValue value, int output) {
+   assert(line != NULL);
+   assert(line->writer == -1 || line->writer == output);
+   assert(line->handler != NULL);
+   assert(line->block != NULL);
+   if (line->value != value) {
+      line->changed = 1;
+      line->value = value;
+      line->writer = output;
+   }
 }
