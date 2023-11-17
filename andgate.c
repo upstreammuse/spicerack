@@ -48,6 +48,18 @@ void andGateConnect(ANDGATE* gate, SIGNAL* output) {
    gate->O = output;
 }
 
+SIGNAL* andGateInputA(ANDGATE* gate) {
+   assert(gate != NULL);
+   assert(gate->magic == AND_GATE_MAGIC);
+   return gate->A;
+}
+
+SIGNAL* andGateInputB(ANDGATE* gate) {
+   assert(gate != NULL);
+   assert(gate->magic == AND_GATE_MAGIC);
+   return gate->B;
+}
+
 void testAndGate(ANDGATE* gate, SIGVAL inA, SIGVAL inB) {
    static int writerA = 46546;
    static int writerB = 94945;
