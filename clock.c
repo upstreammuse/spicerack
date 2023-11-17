@@ -55,7 +55,7 @@ void clockRunTick(CLOCK* clock, enum SignalValue value) {
 
 void clockRun(CLOCK* clock, int cycleCount) {
    int i;
-   if (cycleCount == -1) {
+   if (cycleCount == 0) {
       while (1) {
          clockRunTick(clock, HIGH);
          clockRunTick(clock, LOW);
