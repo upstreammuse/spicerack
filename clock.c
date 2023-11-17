@@ -27,7 +27,7 @@ CLOCK* clockNew(void) {
 }
 
 void clockFree(CLOCK* clock) {
-   assert(clock != NULL);
+   if (clock == NULL) return;
    while (clock->inputs != NULL) {
       NODE* node = clock->inputs;
       clock->inputs = node->next;
