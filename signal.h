@@ -3,15 +3,14 @@
 #include "signalvalue.h"
 
 struct Signal;
-typedef struct Signal SIGNAL;
 
-SIGNAL* signalNew(void* block, void (*handler)(void*));
-void signalFree(SIGNAL*);
+struct Signal* signalNew(void* block, void (*handler)(void*));
+void signalFree(struct Signal*);
 
-void signalWrite(SIGNAL*, enum SignalValue, int writer);
-char signalChanged(SIGNAL*);
-enum SignalValue signalRead(SIGNAL*);
-void signalHandled(SIGNAL*);
+void signalWrite(struct Signal*, enum SignalValue, int writer);
+char signalChanged(struct Signal*);
+enum SignalValue signalRead(struct Signal*);
+void signalHandled(struct Signal*);
 
 int allocateOutput(void);
 void propagate(void);

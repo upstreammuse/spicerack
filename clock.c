@@ -5,19 +5,21 @@
 #include <assert.h>
 #include <stdlib.h>
 
+typedef struct Clock CLOCK;
+typedef struct SignalNode NODE;
+typedef struct Signal SIGNAL;
+typedef enum SignalValue SIGVAL;
+void clockRunTick(CLOCK* clock, SIGVAL value);
+
 struct SignalNode {
    struct Signal* item;
    struct SignalNode* next;
 };
 
-typedef struct SignalNode NODE;
-
 struct Clock {
    NODE* inputs;
    int OID;
 };
-
-typedef struct Clock CLOCK;
 
 CLOCK* clockNew(void) {
    CLOCK* clock = malloc(sizeof (CLOCK));
@@ -36,21 +38,13 @@ void clockFree(CLOCK* clock) {
    free(clock);
 }
 
-void clockConnect(CLOCK* clock, struct Signal* line) {
+void clockConnect(CLOCK* clock, SIGNAL* line) {
    NODE* node = malloc(sizeof (NODE));
    assert(clock != NULL);
    assert(line != NULL);
    node->item = line;
    node->next = clock->inputs;
    clock->inputs = node;
-}
-
-void clockRunTick(CLOCK* clock, enum SignalValue value) {
-   NODE* node;
-   for (node = clock->inputs; node != NULL; node = node->next) {
-      signalWrite(node->item, value, clock->OID);
-   }
-   propagate();
 }
 
 void clockRun(CLOCK* clock, unsigned int cycleCount) {
@@ -66,4 +60,12 @@ void clockRun(CLOCK* clock, unsigned int cycleCount) {
          clockRunTick(clock, LOW);
       }
    }
+}
+
+void clockRunTick(CLOCK* clock, SIGVAL value) {
+   NODE* node;
+   for (node = clock->inputs; node != NULL; node = node->next) {
+      signalWrite(node->item, value, clock->OID);
+   }
+   propagate();
 }
