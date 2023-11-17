@@ -59,9 +59,10 @@ void andGateHandler(void* block) {
    SIGVAL O = UNKNOWN;
 
    assert(gate != NULL);
+   if (gate->O == NULL) return;
+
    A = signalRead(gate->A);
    B = signalRead(gate->B);
-
    switch (A) {
       case UNKNOWN:
       case HIGH_Z:
