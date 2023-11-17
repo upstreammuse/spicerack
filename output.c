@@ -1,8 +1,10 @@
 #include "output.h"
 
-int nextOutput = 1000;
+#include <assert.h>
 
-/* TODO fail when wrapping around? */
-int allocateOutput(void) {
+unsigned int nextOutput = 1;
+
+unsigned int allocateOutput(void) {
+   assert(nextOutput != 0);
    return nextOutput++;
 }
