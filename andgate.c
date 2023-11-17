@@ -60,14 +60,6 @@ SIGNAL* andGateInputB(ANDGATE* gate) {
    return gate->B;
 }
 
-void testAndGate(ANDGATE* gate, SIGVAL inA, SIGVAL inB) {
-   static int writerA = 46546;
-   static int writerB = 94945;
-   signalWrite(gate->A, inA, writerA);
-   signalWrite(gate->B, inB, writerB);
-   propagate();
-}
-
 void andGateHandler(void* block) {
    ANDGATE* gate = block;
    SIGVAL A;

@@ -15,24 +15,31 @@ void debugHandler(void* block) {
 }
 
 int main(void) {
-   struct Clock* clock;
-   struct Debugger d1;
-   struct AndGate* and1;
-   struct Debugger d2;
 
-   printf("clock test\n");
-   clock = clockNew();
-   d1.I = signalNew(&d1, debugHandler);
-   clockConnect(clock, d1.I);
-   clockRun(clock, 2);
-   clockFree(clock);
+   {
+      struct Clock* clock;
+      struct Debugger d;
+      printf("clock test\n");
+      clock = clockNew();
+      d.I = signalNew(&d, debugHandler);
+      clockConnect(clock, d.I);
+      clockRun(clock, 2);
+      clockFree(clock);
+   }
 
-   printf("and test\n");
-   and1 = andGateNew();
-   d2.I = signalNew(&d2, debugHandler);
-   andGateConnect(and1, d2.I);
-   testAndGate(and1, HIGH, HIGH);
-   andGateFree(and1);
+   {
+      struct Debugger d;
+      int writerA = 46546;
+      int writerB = 94945;
+      struct AndGate* gate = andGateNew();
+      printf("and test\n");
+      d.I = signalNew(&d, debugHandler);
+      andGateConnect(gate, d.I);
+      signalWrite(andGateInputA(gate), HIGH, writerA);
+      signalWrite(andGateInputB(gate), HIGH, writerB);
+      propagate();
+      andGateFree(gate);
+   }
 
    return 0;
 }
