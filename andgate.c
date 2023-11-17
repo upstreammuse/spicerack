@@ -1,5 +1,6 @@
 #include "andgate.h"
 
+#include "output.h"
 #include "signal.h"
 
 #include <assert.h>

@@ -27,7 +27,6 @@ struct Signal {
 /* TODO decide how to handle allocation, maybe just stick with malloc for now */
 struct Signal inputs[1000];
 int nextInput = 0;
-int nextOutput = 1000;
 
 /* TODO realloc or fail when over the array size limit */
 struct Signal* signalNew(void* block, void (*handler)(void*)) {
@@ -43,11 +42,6 @@ struct Signal* signalNew(void* block, void (*handler)(void*)) {
 void signalFree(struct Signal* signal) {
    (void)signal;
    /* do nothing for now */
-}
-
-/* TODO fail when wrapping around? */
-int allocateOutput(void) {
-   return nextOutput++;
 }
 
 enum SignalValue signalRead(struct Signal* line) {

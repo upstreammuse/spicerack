@@ -5,4 +5,5 @@ add_executable(spicerack
 	andgate.h andgate.c
 	clock.h clock.c
 	main.c
+	output.h output.c
 	signal.h signal.c)
