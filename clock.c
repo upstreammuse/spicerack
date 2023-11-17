@@ -53,14 +53,14 @@ void clockRunTick(CLOCK* clock, enum SignalValue value) {
    propagate();
 }
 
-void clockRun(CLOCK* clock, int cycleCount) {
-   int i;
+void clockRun(CLOCK* clock, unsigned int cycleCount) {
    if (cycleCount == 0) {
       while (1) {
          clockRunTick(clock, HIGH);
          clockRunTick(clock, LOW);
       }
    } else {
+      unsigned int i;
       for (i = 0; i < cycleCount; i++) {
          clockRunTick(clock, HIGH);
          clockRunTick(clock, LOW);
