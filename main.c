@@ -37,7 +37,7 @@ int main(void) {
       andGateConnect(gate, d.I);
       signalWrite(andGateInputA(gate), HIGH, writerA);
       signalWrite(andGateInputB(gate), HIGH, writerB);
-      propagate();
+      signalPropagate();
       andGateFree(gate);
    }
 

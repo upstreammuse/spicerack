@@ -69,5 +69,5 @@ void clockRunTick(CLOCK* clock, SIGVAL value) {
    for (node = clock->inputs; node != NULL; node = node->next) {
       signalWrite(node->item, value, clock->OID);
    }
-   propagate();
+   signalPropagate();
 }

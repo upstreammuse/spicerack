@@ -12,4 +12,4 @@ char signalChanged(struct Signal*);
 enum SignalValue signalRead(struct Signal*);
 void signalHandled(struct Signal*);
 
-void propagate(void);
+void signalPropagate(void);

@@ -58,7 +58,7 @@ void signalWrite(struct Signal* line, enum SignalValue value, int output) {
    }
 }
 
-void propagate(void) {
+void signalPropagate(void) {
    int goAgain = 0;
    do {
       int i;
