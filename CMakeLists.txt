@@ -6,4 +6,5 @@ add_executable(spicerack
 	clock.h clock.c
 	main.c
 	output.h output.c
-	signal.h signal.c)
+	signal.h signal.c
+	signalvalue.h signalvalue.c)

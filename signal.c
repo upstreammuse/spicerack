@@ -3,19 +3,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-char* signalValueStr(enum SignalValue val) {
-   switch (val) {
-      case UNKNOWN:
-         return "[unknown]";
-      case HIGH:
-         return "[high]";
-      case LOW:
-         return "[low]";
-      case HIGH_Z:
-         return "[highZ]";
-   }
-}
-
 struct Signal {
    char changed;
    enum SignalValue value;
