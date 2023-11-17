@@ -9,6 +9,7 @@ typedef struct Clock CLOCK;
 typedef struct SignalNode NODE;
 typedef struct Signal SIGNAL;
 typedef enum SignalValue SIGVAL;
+
 void clockRunTick(CLOCK* clock, SIGVAL value);
 
 struct SignalNode {
