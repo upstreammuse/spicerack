@@ -4,61 +4,45 @@
 #include <stdlib.h>
 
 typedef struct Signal SIGNAL;
+typedef struct SignalNode NODE;
 typedef enum SignalValue SIGVAL;
 
 struct Signal {
-   char changed;
    SIGVAL value;
    int writer;
    void* block;
    void (*handler)(void*);
 };
 
-/* TODO decide how to handle allocation, maybe just stick with malloc for now */
-SIGNAL inputs[1000];
-int nextInput = 0;
+struct SignalNode {
+   SIGNAL* signal;
+   NODE* next;
+};
 
-/* TODO realloc or fail when over the array size limit */
+NODE* signals = NULL;
+
 SIGNAL* signalNew(void* block, void (*handler)(void*)) {
-   int i = nextInput++;
+   SIGNAL* signal = malloc(sizeof (SIGNAL));
    assert(block != NULL);
    assert(handler != NULL);
-   inputs[i].changed = 1;
-   inputs[i].value = HIGH_Z;
-   inputs[i].writer = -1;
-   inputs[i].block = block;
-   inputs[i].handler = handler;
-   return inputs + i;
+   signal->value = HIGH_Z;
+   signal->writer = -1;
+   signal->block = block;
+   signal->handler = handler;
+   return signal;
 }
 
 void signalFree(SIGNAL* signal) {
-   (void)signal;
-   /* do nothing for now */
-}
-
-char signalChanged(SIGNAL* signal) {
-   assert(signal != NULL);
-   return signal->changed;
-}
-
-void signalHandled(SIGNAL* signal) {
-   assert(signal != NULL);
-   signal->changed = 0;
+   free(signal);
 }
 
 void signalPropagate(void) {
-   int goAgain = 0;
-   do {
-      int i;
-      goAgain = 0;
-      for (i = 0; i < nextInput; i++) {
-         if (inputs[i].changed) {
-            goAgain = 1;
-            inputs[i].handler(inputs[i].block);
-            inputs[i].changed = 0;
-         }
-      }
-   } while(goAgain);
+   while (signals != NULL) {
+      NODE* node = signals;
+      signals = signals->next;
+      node->signal->handler(node->signal->block);
+      free(node);
+   }
 }
 
 SIGVAL signalRead(SIGNAL* signal) {
@@ -70,8 +54,11 @@ void signalWrite(SIGNAL* signal, SIGVAL value, int writer) {
    assert(signal != NULL);
    assert(signal->writer == -1 || signal->writer == writer);
    if (signal->value != value) {
-      signal->changed = 1;
+      NODE* node = malloc(sizeof (NODE));
       signal->value = value;
       signal->writer = writer;
+      node->signal = signal;
+      node->next = signals;
+      signals = node;
    }
 }

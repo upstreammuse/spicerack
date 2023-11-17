@@ -83,6 +83,4 @@ void andGateHandler(void* block) {
    }
 
    signalWrite(gate->O, O, gate->OID);
-   signalHandled(gate->A);
-   signalHandled(gate->B);
 }

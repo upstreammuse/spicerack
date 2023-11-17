@@ -10,8 +10,7 @@ struct Debugger {
 
 void debugHandler(void* block) {
    struct Debugger* d = block;
-   printf("%d %s\n", signalChanged(d->I), signalValueStr(signalRead(d->I)));
-   signalHandled(d->I);
+   printf("%s\n", signalValueStr(signalRead(d->I)));
 }
 
 int main(void) {
