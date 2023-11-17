@@ -57,15 +57,12 @@ void testAndGate(ANDGATE* gate, SIGVAL inA, SIGVAL inB) {
 }
 
 void andGateHandler(void* block) {
-   int* magic = block;
    ANDGATE* gate = block;
    SIGVAL A;
    SIGVAL B;
    SIGVAL O = UNKNOWN;
 
-   assert(magic != NULL);
    assert(gate != NULL);
-   assert(*magic == AND_GATE_MAGIC);
    assert(gate->magic == AND_GATE_MAGIC);
 
    A = signalRead(gate->A);
