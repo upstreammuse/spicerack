@@ -32,8 +32,8 @@ ANDGATE* andGateNew(void) {
    return gate;
 }
 
-   assert(gate != NULL);
 void andGateFree(ANDGATE* gate) {
+   if (gate == NULL) return;
    assert(gate->magic == AND_GATE_MAGIC);
    signalFree(gate->A);
    signalFree(gate->B);
