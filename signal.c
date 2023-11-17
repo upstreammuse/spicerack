@@ -3,42 +3,47 @@
 #include <assert.h>
 #include <stdlib.h>
 
+typedef struct Signal SIGNAL;
+typedef enum SignalValue SIGVAL;
+
 struct Signal {
    char changed;
-   enum SignalValue value;
+   SIGVAL value;
    int writer;
    void* block;
    void (*handler)(void*);
 };
 
 /* TODO decide how to handle allocation, maybe just stick with malloc for now */
-struct Signal inputs[1000];
+SIGNAL inputs[1000];
 int nextInput = 0;
 
 /* TODO realloc or fail when over the array size limit */
-struct Signal* signalNew(void* block, void (*handler)(void*)) {
+SIGNAL* signalNew(void* block, void (*handler)(void*)) {
    int i = nextInput++;
+   assert(block != NULL);
+   assert(handler != NULL);
    inputs[i].changed = 1;
    inputs[i].value = HIGH_Z;
    inputs[i].writer = -1;
-   inputs[i].handler = handler;
    inputs[i].block = block;
+   inputs[i].handler = handler;
    return inputs + i;
 }
 
-void signalFree(struct Signal* signal) {
+void signalFree(SIGNAL* signal) {
    (void)signal;
    /* do nothing for now */
 }
 
-char signalChanged(struct Signal* line) {
-   assert(line != NULL);
-   return line->changed;
+char signalChanged(SIGNAL* signal) {
+   assert(signal != NULL);
+   return signal->changed;
 }
 
-void signalHandled(struct Signal* line) {
-   assert(line != NULL);
-   line->changed = 0;
+void signalHandled(SIGNAL* signal) {
+   assert(signal != NULL);
+   signal->changed = 0;
 }
 
 void signalPropagate(void) {
@@ -49,8 +54,6 @@ void signalPropagate(void) {
       for (i = 0; i < nextInput; i++) {
          if (inputs[i].changed) {
             goAgain = 1;
-            assert(inputs[i].handler != NULL);
-            assert(inputs[i].block != NULL);
             inputs[i].handler(inputs[i].block);
             inputs[i].changed = 0;
          }
@@ -58,19 +61,17 @@ void signalPropagate(void) {
    } while(goAgain);
 }
 
-enum SignalValue signalRead(struct Signal* line) {
-   assert(line != NULL);
-   return line->value;
+SIGVAL signalRead(SIGNAL* signal) {
+   assert(signal != NULL);
+   return signal->value;
 }
 
-void signalWrite(struct Signal* line, enum SignalValue value, int output) {
-   assert(line != NULL);
-   assert(line->writer == -1 || line->writer == output);
-   assert(line->handler != NULL);
-   assert(line->block != NULL);
-   if (line->value != value) {
-      line->changed = 1;
-      line->value = value;
-      line->writer = output;
+void signalWrite(SIGNAL* signal, SIGVAL value, int writer) {
+   assert(signal != NULL);
+   assert(signal->writer == -1 || signal->writer == writer);
+   if (signal->value != value) {
+      signal->changed = 1;
+      signal->value = value;
+      signal->writer = writer;
    }
 }
