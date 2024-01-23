@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 project(spicerack)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi -pedantic -Wall -Wextra -Werror")
-add_executable(spicerack
-	andgate.h andgate.c
-	clock.h clock.c
-	counter.h counter.c
-	main.c
-	output.h output.c
-	signal.h signal.c
-	signalvalue.h signalvalue.c)
+set(filebase andgate clock counter output signal signalvalue)
+set(headers ${filebase})
+set(sources ${filebase})
+list(TRANSFORM headers APPEND .h)
+list(TRANSFORM sources APPEND .c)
+add_library(spicerack ${headers} ${sources})
+install(FILES ${headers} DESTINATION include/spicerack)
+install(TARGETS spicerack DESTINATION lib)
+install(FILES spicerack-config.cmake DESTINATION lib/cmake/spicerack)

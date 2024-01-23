@@ -1,0 +1,5 @@
+add_library(spicerack STATIC IMPORTED)
+find_library(SPICERACK_LIBRARY_PATH spicerack HINTS "${CMAKE_CURRENT_LIST_DIR}/../../")
+find_path(SPICERACK_HEADER_PATH signalvalue.h HINTS "${CMAKE_CURRENT_LIST_DIR}/../../../include/spicerack")
+set_target_properties(spicerack PROPERTIES IMPORTED_LOCATION "${SPICERACK_LIBRARY_PATH}")
+set_target_properties(spicerack PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${SPICERACK_HEADER_PATH}/..")
