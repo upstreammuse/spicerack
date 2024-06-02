@@ -24,7 +24,7 @@ struct Watcher {
 };
 
 WATCHER* watcherNew(char const* label) {
-   WATCHER* w = malloc(sizeof (WATCHER*));
+   WATCHER* w = malloc(sizeof (WATCHER));
    w->clock = signalNew(w, watcherHandler);
    w->clockCount = -1;
    w->input = signalNew(w, watcherHandler);
