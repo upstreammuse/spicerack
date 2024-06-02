@@ -39,6 +39,7 @@ void andGateFree(ANDGATE* gate) {
 void andGateConnect(ANDGATE* gate, SIGNAL* output) {
    assert(gate != NULL);
    assert(output != NULL);
+   assert(gate->O == NULL);
    gate->O = output;
 }
 
