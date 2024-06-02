@@ -50,6 +50,7 @@ void clockConnect(CLOCK* clock, SIGNAL* line) {
 }
 
 void clockRun(CLOCK* clock, unsigned int cycleCount) {
+   assert(clock != NULL);
    if (cycleCount == 0) {
       while (1) {
          clockRunTick(clock, HIGH);
@@ -66,6 +67,7 @@ void clockRun(CLOCK* clock, unsigned int cycleCount) {
 
 void clockRunTick(CLOCK* clock, SIGVAL value) {
    NODE* node;
+   assert(clock != NULL);
    for (node = clock->inputs; node != NULL; node = node->next) {
       signalWrite(node->item, value, clock->OID);
    }
