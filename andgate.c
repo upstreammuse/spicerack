@@ -32,7 +32,6 @@ void andGateFree(ANDGATE* gate) {
    if (gate == NULL) return;
    signalFree(gate->A);
    signalFree(gate->B);
-   signalFree(gate->O);
    free(gate);
 }
 
