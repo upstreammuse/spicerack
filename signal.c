@@ -53,10 +53,10 @@ SIGVAL signalRead(SIGNAL* signal) {
 void signalWrite(SIGNAL* signal, SIGVAL value, int writer) {
    assert(signal != NULL);
    assert(signal->writer == -1 || signal->writer == writer);
+   signal->writer = writer;
    if (signal->value != value) {
       NODE* node = malloc(sizeof (NODE));
       signal->value = value;
-      signal->writer = writer;
       node->signal = signal;
       node->next = signals;
       signals = node;
