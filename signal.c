@@ -25,7 +25,7 @@ SIGNAL* signalNew(void* block, void (*handler)(void*)) {
    SIGNAL* signal = malloc(sizeof (SIGNAL));
    assert(block != NULL);
    assert(handler != NULL);
-   signal->value = HIGH_Z;
+   signal->value = UNKNOWN;
    signal->writer = -1;
    signal->block = block;
    signal->handler = handler;
