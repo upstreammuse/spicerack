@@ -10,7 +10,7 @@ typedef struct Counter COUNTER;
 typedef struct Signal SIGNAL;
 typedef enum SignalValue SIGVAL;
 
-void counterHandler(void* block);
+static void counterHandler(void* block);
 
 struct Counter {
    SIGNAL* clk;
@@ -60,7 +60,7 @@ SIGNAL* counterReset(COUNTER* counter) {
    return counter->rst;
 }
 
-void counterHandler(void* block) {
+static void counterHandler(void* block) {
    COUNTER* counter = block;
    assert(counter != NULL);
 

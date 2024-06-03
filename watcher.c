@@ -12,7 +12,7 @@ typedef struct Signal SIGNAL;
 typedef enum SignalValue SIGVAL;
 typedef struct Watcher WATCHER;
 
-void watcherHandler(void*);
+static void watcherHandler(void*);
 
 struct Watcher {
    SIGNAL* clock;
@@ -50,7 +50,7 @@ SIGNAL* watcherInput(WATCHER* w) {
    return w->input;
 }
 
-void watcherHandler(void* block) {
+static void watcherHandler(void* block) {
    WATCHER* w = block;
    SIGVAL C;
    SIGVAL I;

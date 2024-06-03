@@ -19,7 +19,7 @@ struct SignalNode {
    NODE* next;
 };
 
-NODE* signals = NULL;
+static NODE* signals = NULL;
 
 SIGNAL* signalNew(void* block, void (*handler)(void*)) {
    SIGNAL* signal = malloc(sizeof (SIGNAL));

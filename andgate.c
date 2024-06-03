@@ -10,7 +10,7 @@ typedef struct AndGate ANDGATE;
 typedef struct Signal SIGNAL;
 typedef enum SignalValue SIGVAL;
 
-void andGateHandler(void*);
+static void andGateHandler(void*);
 
 struct AndGate {
    SIGNAL* A;
@@ -53,7 +53,7 @@ SIGNAL* andGateInputB(ANDGATE* gate) {
    return gate->B;
 }
 
-void andGateHandler(void* block) {
+static void andGateHandler(void* block) {
    ANDGATE* gate = block;
    SIGVAL A;
    SIGVAL B;

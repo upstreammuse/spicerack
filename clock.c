@@ -11,7 +11,7 @@ typedef struct SignalNode NODE;
 typedef struct Signal SIGNAL;
 typedef enum SignalValue SIGVAL;
 
-void clockRunTick(CLOCK* clock, SIGVAL value);
+static void clockRunTick(CLOCK* clock, SIGVAL value);
 
 struct SignalNode {
    struct Signal* item;
@@ -65,7 +65,7 @@ void clockRun(CLOCK* clock, unsigned int cycleCount) {
    }
 }
 
-void clockRunTick(CLOCK* clock, SIGVAL value) {
+static void clockRunTick(CLOCK* clock, SIGVAL value) {
    NODE* node;
    assert(clock != NULL);
    for (node = clock->inputs; node != NULL; node = node->next) {
