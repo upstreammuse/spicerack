@@ -9,7 +9,7 @@ typedef enum SignalValue SIGVAL;
 
 struct Signal {
    SIGVAL value;
-   int writer;
+   unsigned int writer;
    void* block;
    void (*handler)(void*);
 };
@@ -50,9 +50,10 @@ SIGVAL signalRead(SIGNAL* signal) {
    return signal->value;
 }
 
-void signalWrite(SIGNAL* signal, SIGVAL value, int writer) {
+void signalWrite(struct Signal* signal, enum SignalValue value,
+                 unsigned int writer) {
    assert(signal != NULL);
-   assert(signal->writer == -1 || signal->writer == writer);
+   assert(signal->writer == (unsigned int)-1 || signal->writer == writer);
    signal->writer = writer;
    if (signal->value != value) {
       NODE* node = malloc(sizeof (NODE));

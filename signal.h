@@ -9,4 +9,4 @@ void signalFree(struct Signal*);
 
 void signalPropagate(void);
 enum SignalValue signalRead(struct Signal*);
-void signalWrite(struct Signal*, enum SignalValue, int writer);
+void signalWrite(struct Signal*, enum SignalValue, unsigned int writer);
