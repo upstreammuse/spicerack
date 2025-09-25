@@ -6,12 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-typedef struct Clock CLOCK;
-typedef struct SignalNode NODE;
-typedef struct Signal SIGNAL;
-typedef enum SignalValue SIGVAL;
-
-static void clockRunTick(CLOCK* clock, SIGVAL value);
+static void clockRunTick(struct Clock* clock, enum SignalValue value);
 
 struct SignalNode {
    struct Signal* item;
@@ -19,29 +14,29 @@ struct SignalNode {
 };
 
 struct Clock {
-   NODE* inputs;
    int OID;
+   struct SignalNode* inputs;
 };
 
-CLOCK* clockNew(void) {
-   CLOCK* clock = malloc(sizeof (CLOCK));
+struct Clock* clockNew(void) {
+   struct Clock* clock = malloc(sizeof (struct Clock));
    clock->inputs = NULL;
    clock->OID = allocateOutput();
    return clock;
 }
 
-void clockFree(CLOCK* clock) {
+void clockFree(struct Clock* clock) {
    if (clock == NULL) return;
    while (clock->inputs != NULL) {
-      NODE* node = clock->inputs;
+      struct SignalNode* node = clock->inputs;
       clock->inputs = node->next;
       free(node);
    }
    free(clock);
 }
 
-void clockConnect(CLOCK* clock, SIGNAL* line) {
-   NODE* node = malloc(sizeof (NODE));
+void clockConnect(struct Clock* clock, struct Signal* line) {
+   struct SignalNode* node = malloc(sizeof (struct SignalNode));
    assert(clock != NULL);
    assert(line != NULL);
    node->item = line;
@@ -49,7 +44,7 @@ void clockConnect(CLOCK* clock, SIGNAL* line) {
    clock->inputs = node;
 }
 
-void clockRun(CLOCK* clock, unsigned int cycleCount) {
+void clockRun(struct Clock* clock, unsigned int cycleCount) {
    assert(clock != NULL);
    if (cycleCount == 0) {
       while (1) {
@@ -65,8 +60,8 @@ void clockRun(CLOCK* clock, unsigned int cycleCount) {
    }
 }
 
-static void clockRunTick(CLOCK* clock, SIGVAL value) {
-   NODE* node;
+static void clockRunTick(struct Clock* clock, enum SignalValue value) {
+   SignalList* node;
    assert(clock != NULL);
    for (node = clock->inputs; node != NULL; node = node->next) {
       signalWrite(node->item, value, clock->OID);
