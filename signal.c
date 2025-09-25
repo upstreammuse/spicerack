@@ -4,9 +4,16 @@
 #include <stdlib.h>
 
 struct Signal {
+   /* the signal's value */
    enum SignalValue value;
+
+   /* writer ID number to associate writers with signals */
    unsigned int writer;
+
+   /* the device that changes when the signal changes */
    void* block;
+
+   /* the code that runs when the signal changes */
    void (*handler)(void*);
 };
 
@@ -17,6 +24,12 @@ struct SignalNode {
 
 static struct SignalNode* signals = NULL;
 
+/*
+ Create a new signal with an unassigned writer ID, unknown value, and the
+ provided block device and handler code.  When the signal changes, the handler
+ is called with the device so that the device modeled by the handler code runs
+ with the initial state defined by the block structure.
+ */
 struct Signal* signalNew(void* block, void (*handler)(void*)) {
    struct Signal* signal = malloc(sizeof (struct Signal));
    assert(block != NULL);
@@ -46,6 +59,11 @@ enum SignalValue signalRead(struct Signal* signal) {
    return signal->value;
 }
 
+/*
+ Update the signal with the provided value, checking that the writer has not
+ changed.  If the signal value changes from its previous value, add it to the
+ list of signals to be propagated through the system.
+ */
 void signalWrite(struct Signal* signal, enum SignalValue value,
                  unsigned int writer) {
    assert(signal != NULL);
