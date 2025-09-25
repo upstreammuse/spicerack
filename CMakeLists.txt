@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(spicerack)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ansi -pedantic -Wall -Wextra -Werror")
-set(filebase andgate clock counter output signal signalvalue watcher)
+set(filebase andgate clock counter output signal signalset signalvalue watcher)
 set(headers ${filebase})
 set(sources ${filebase})
 list(TRANSFORM headers APPEND .h)
