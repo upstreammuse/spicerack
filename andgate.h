@@ -1,7 +1,5 @@
 #pragma once
 
-#include "signalvalue.h"
-
 struct AndGate;
 struct Signal;
 
