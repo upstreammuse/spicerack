@@ -9,10 +9,10 @@
 static void andGateHandler(void*);
 
 struct AndGate {
-   int OID;
    struct Signal* A;
    struct Signal* B;
    struct Signal* O;
+   unsigned int OID;
 };
 
 struct AndGate* andGateNew(void) {
