@@ -9,27 +9,27 @@
 static void clockRunTick(struct Clock* clock, enum SignalValue value);
 
 struct SignalNode {
-   struct Signal* item;
+   struct Signal* signal;
    struct SignalNode* next;
 };
 
 struct Clock {
-   struct SignalNode* inputs;
+   struct SignalNode* signals;
    unsigned int OID;
 };
 
 struct Clock* clockNew(void) {
    struct Clock* clock = malloc(sizeof (struct Clock));
-   clock->inputs = NULL;
+   clock->signals = NULL;
    clock->OID = allocateOutput();
    return clock;
 }
 
 void clockFree(struct Clock* clock) {
    if (clock == NULL) return;
-   while (clock->inputs != NULL) {
-      struct SignalNode* node = clock->inputs;
-      clock->inputs = node->next;
+   while (clock->signals != NULL) {
+      struct SignalNode* node = clock->signals;
+      clock->signals = node->next;
       free(node);
    }
    free(clock);
@@ -39,9 +39,9 @@ void clockConnect(struct Clock* clock, struct Signal* line) {
    struct SignalNode* node = malloc(sizeof (struct SignalNode));
    assert(clock != NULL);
    assert(line != NULL);
-   node->item = line;
-   node->next = clock->inputs;
-   clock->inputs = node;
+   node->signal = line;
+   node->next = clock->signals;
+   clock->signals = node;
 }
 
 void clockRun(struct Clock* clock, unsigned int cycleCount) {
@@ -61,10 +61,10 @@ void clockRun(struct Clock* clock, unsigned int cycleCount) {
 }
 
 static void clockRunTick(struct Clock* clock, enum SignalValue value) {
-   SignalList* node;
+   struct SignalNode* node;
    assert(clock != NULL);
-   for (node = clock->inputs; node != NULL; node = node->next) {
-      signalWrite(node->item, value, clock->OID);
+   for (node = clock->signals; node != NULL; node = node->next) {
+      signalWrite(node->signal, value, clock->OID);
    }
    signalPropagate();
 }
