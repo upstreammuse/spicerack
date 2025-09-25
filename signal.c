@@ -3,26 +3,22 @@
 #include <assert.h>
 #include <stdlib.h>
 
-typedef struct Signal SIGNAL;
-typedef struct SignalNode NODE;
-typedef enum SignalValue SIGVAL;
-
 struct Signal {
-   SIGVAL value;
+   enum SignalValue value;
    unsigned int writer;
    void* block;
    void (*handler)(void*);
 };
 
 struct SignalNode {
-   SIGNAL* signal;
-   NODE* next;
+   struct Signal* signal;
+   struct SignalNode* next;
 };
 
-static NODE* signals = NULL;
+static struct SignalNode* signals = NULL;
 
-SIGNAL* signalNew(void* block, void (*handler)(void*)) {
-   SIGNAL* signal = malloc(sizeof (SIGNAL));
+struct Signal* signalNew(void* block, void (*handler)(void*)) {
+   struct Signal* signal = malloc(sizeof (struct Signal));
    assert(block != NULL);
    assert(handler != NULL);
    signal->value = UNKNOWN;
@@ -32,20 +28,20 @@ SIGNAL* signalNew(void* block, void (*handler)(void*)) {
    return signal;
 }
 
-void signalFree(SIGNAL* signal) {
+void signalFree(struct Signal* signal) {
    free(signal);
 }
 
 void signalPropagate(void) {
    while (signals != NULL) {
-      NODE* node = signals;
+      struct SignalNode* node = signals;
       signals = signals->next;
       node->signal->handler(node->signal->block);
       free(node);
    }
 }
 
-SIGVAL signalRead(SIGNAL* signal) {
+enum SignalValue signalRead(struct Signal* signal) {
    assert(signal != NULL);
    return signal->value;
 }
@@ -56,7 +52,7 @@ void signalWrite(struct Signal* signal, enum SignalValue value,
    assert(signal->writer == (unsigned int)-1 || signal->writer == writer);
    signal->writer = writer;
    if (signal->value != value) {
-      NODE* node = malloc(sizeof (NODE));
+      struct SignalNode* node = malloc(sizeof (struct SignalNode));
       signal->value = value;
       node->signal = signal;
       node->next = signals;
