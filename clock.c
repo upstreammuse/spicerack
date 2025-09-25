@@ -14,8 +14,8 @@ struct SignalNode {
 };
 
 struct Clock {
-   int OID;
    struct SignalNode* inputs;
+   unsigned int OID;
 };
 
 struct Clock* clockNew(void) {
